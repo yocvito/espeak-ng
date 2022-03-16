@@ -1,0 +1,19 @@
+CC=clang CXX=clang++  ./configure
+
+
+
+
+ASAN_OPTIONS=halt_on_error=0 make V=1 : pour que ça ignore des erreurs
+
+
+
+faire tourner en parallel
+
+alimenter le corpus
+
+
+
+
+
+
+

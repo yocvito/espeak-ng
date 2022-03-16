@@ -67,19 +67,7 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
        espeak_Synth((char*) str, size + 1, 0, POS_CHARACTER, 0,
 	             synth_flags, NULL, NULL);
        free(str);
-       //espeak_TextToPhonemes(const void **textptr, int textmode, int phonememode);
 
-      // ESPEAK_API const espeak_VOICE **espeak_ListVoices(espeak_VOICE *voice_spec);
-     // ESPEAK_API espeak_ERROR espeak_SetVoiceByFile(const char *filename);
-/*
-     ESPEAK_API espeak_ERROR espeak_Synth_Mark(const void *text,
-	size_t size,
-	const char *index_mark,
-	unsigned int end_position,
-	unsigned int flags,
-	unsigned int* unique_identifier,
-	void* user_data);
-    */
 
 	return 0;
 }
