@@ -327,7 +327,7 @@ dnl ================================================================
 dnl Generate output.
 dnl ================================================================
 
-AC_CONFIG_FILES([Makefile espeak-ng.pc src/Makefile tests/Makefile])
+AC_CONFIG_FILES([Makefile espeak-ng.pc ])
 AC_OUTPUT
 
 if test "$enable_rpath" = "yes" ; then

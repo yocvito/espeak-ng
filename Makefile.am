@@ -17,8 +17,7 @@ MKDIR=mkdir -p
 
 AM_CFLAGS = \
 	-Isrc/include -Isrc/include/compat -I$(srcdir)/src/speechPlayer/include -I$(srcdir)/src/ucd-tools/src/include \
-	-D_BSD_SOURCE -D_DEFAULT_SOURCE  -D_POSIX_C_SOURCE=200112L -fsanitize=fuzzer,address
-#-fsanitize-coverage=edge,trace-pc-guard,indirect-calls,trace-cmp,trace-div,trace-gep
+	-D_BSD_SOURCE -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=200112L
 
 EXTRA_DIST=
 CLEANFILES = dictsource/ru_listx dictsource/cmn_listx dictsource/yue_listx
@@ -204,15 +203,15 @@ src_libespeak_ng_la_SOURCES += \
 	src/libespeak-ng/fifo.c
 endif
 
-#bin_PROGRAMS += src/speak-ng
+bin_PROGRAMS += src/speak-ng
 
 if HAVE_RONN
 man1_MANS += src/speak-ng.1
 endif
 
 src_speak_ng_LDADD   = src/libespeak-ng.la
-src_speak_ng_LDFLAGS = -static -lm  -fsanitize-coverage=trace-pc  ${PCAUDIOLIB_LIBS}
-src_speak_ng_CFLAGS  = -Isrc/libespeak-ng   ${AM_CFLAGS}
+src_speak_ng_LDFLAGS = -static -lm ${PCAUDIOLIB_LIBS}
+src_speak_ng_CFLAGS  = -Isrc/libespeak-ng ${AM_CFLAGS}
 
 bin_PROGRAMS += src/espeak-ng
 
@@ -220,9 +219,7 @@ if HAVE_RONN
 man1_MANS += src/espeak-ng.1
 endif
 
-src_espeak_ng_LDADD   = src/libespeak-ng.la  ${PCAUDIOLIB_LIBS}
-#-fsanitize-coverage=edge,trace-pc-guard,indirect-calls,trace-cmp,trace-div,trace-gep
-src_espeak_ng_LDFLAGS = -fsanitize=address
+src_espeak_ng_LDADD   = src/libespeak-ng.la ${PCAUDIOLIB_LIBS}
 src_espeak_ng_SOURCES = src/espeak-ng.c
 if HAVE_LIBFUZZER
 nodist_EXTRA_src_espeak_ng_SOURCES = force-cxx-linking.cxx
@@ -240,6 +237,14 @@ src_libespeak_ng_test_la_CFLAGS  = \
 	-fPIC -pedantic -fno-exceptions -DPATH_ESPEAK_DATA=\"$(DATADIR)\" -DLIBESPEAK_NG_EXPORT \
 	${PCAUDIOLIB_CFLAGS} ${AM_CFLAGS}
 src_libespeak_ng_test_la_SOURCES = $(src_libespeak_ng_la_SOURCES)
+
+
+tests_my_fuzzer_SOURCES = tests/my_fuzzer.c
+bin_PROGRAMS +=  tests/my_fuzzer
+tests_my_fuzzer_LDADD =  src/libespeak-ng.la
+tests_my_fuzzer_CFLAGS= -fsanitize=address,fuzzer -O2 -fno-omit-frame-pointer -g -fsanitize-coverage=edge -Isrc/libespeak-ng ${AM_CFLAGS}
+tests_my_fuzzer_LDFLAGS= -fsanitize=address,fuzzer -static -lm  -fsanitize-coverage=edge ${PCAUDIOLIB_LIBS}
+
 
 check_PROGRAMS += tests/encoding.test
 
