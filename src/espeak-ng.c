@@ -375,7 +375,7 @@ int main(int argc, char **argv)
 		switch (c)
 		{
 		case 'b':
-			// input character encoding, 8bit, 16bit, UTF8
+			// input character encodespeak_ng_CompileDictionarying, 8bit, 16bit, UTF8
 			if ((sscanf(optarg2, "%d", &value) == 1) && (value <= 4))
 				synth_flags |= value;
 			else

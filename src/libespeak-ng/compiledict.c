@@ -230,17 +230,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 		'&', '%', '+', '#', 'S', 'D', 'Z', 'A', 'L', '!',
 		' ', '@', '?', 'J', 'N', 'K', 'V', '?', 'T', 'X',
 		'?', 'W'
-	};
-
-	static char symbols_lg[] = { 'A', 'B', 'C', 'H', 'F', 'G', 'Y' };
-
-	match_type = 0;
-	buf_pre[0] = 0;
-
-	for (ix = 0; ix < group_length; ix++)
-		buf[ix] = group_chars[ix];
-	buf[ix] = 0;
-
+	};compile_line
 	p = &buf[strlen(buf)];
 	while (!finished) {
 		rb = *rule++;

