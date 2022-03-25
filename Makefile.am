@@ -267,7 +267,11 @@ tests_my_fuzzer_LDADD =  src/libespeak-ng.la
 tests_my_fuzzer_CFLAGS= -fsanitize=address,fuzzer -O2 -fno-omit-frame-pointer -g -fsanitize-coverage=edge -Isrc/libespeak-ng ${AM_CFLAGS}
 tests_my_fuzzer_LDFLAGS= -fsanitize=address,fuzzer -static -lm  -fsanitize-coverage=edge ${PCAUDIOLIB_LIBS}
 
-
+tests_fuzz_compileDictionnary_SOURCES = tests/fuzz_compileDictionnary.c
+bin_PROGRAMS +=  tests/fuzz_compileDictionnary
+tests_fuzz_compileDictionnary_LDADD =  src/libespeak-ng.la
+tests_fuzz_compileDictionnary_CFLAGS= -fsanitize=address,fuzzer -O2 -fno-omit-frame-pointer -g -fsanitize-coverage=edge -Isrc/libespeak-ng ${AM_CFLAGS}
+tests_fuzz_compileDictionnary_LDFLAGS= -fsanitize=address,fuzzer -static -lm  -fsanitize-coverage=edge ${PCAUDIOLIB_LIBS}
 
 ##### phoneme data:
 
