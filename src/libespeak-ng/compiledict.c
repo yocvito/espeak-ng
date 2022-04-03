@@ -230,7 +230,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 		'&', '%', '+', '#', 'S', 'D', 'Z', 'A', 'L', '!',
 		' ', '@', '?', 'J', 'N', 'K', 'V', '?', 'T', 'X',
 		'?', 'W'
-	};compile_line
+	};
 	p = &buf[strlen(buf)];
 	while (!finished) {
 		rb = *rule++;
@@ -298,7 +298,7 @@ char *DecodeRule(const char *group_chars, int group_length, char *rule, int cont
 			p += strlen(suffix);
 			c = ' ';
 		} else if (rb == RULE_LETTERGP)
-			c = symbols_lg[*rule++ - 'A'];
+			c = symbols[*rule++ - 'A'];
 		else if (rb == RULE_LETTERGP2) {
 			value = *rule++ - 'A';
 			if (value < 0)
