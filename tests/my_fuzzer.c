@@ -30,10 +30,13 @@
 #define MAX_LEN				8192
 #define ESPEAK_DATA_PATH	"/usr/lib/x86_64-linux-gnu/espeak-ng-data/"
 
-static const char *langs[] = {
+#define N_FUZZED_LANG		4
+static const char *langs[N_FUZZED_LANG+1] = {
 	"en",
 	"fr",
-	"ru"
+	"ru",
+	"Georgian",
+	NULL
 };
 
 static int initialized = 0;
@@ -61,21 +64,6 @@ extern int LLVMFuzzerInitialize(const int* argc, char*** argv)
 	return 0;
 }
 
-/**
- int main(int argc, char* argv[]) {
-   char voicename[] = {"English"}; // Set voice by its name
-   char text[] = {"Hello world!"};
-   int buflength = 500, options = 0;
-   unsigned int position = 0, position_type = 0, end_position = 0, flags = espeakCHARS_AUTO;
-   espeak_Initialize(output, buflength, path, options);
-   espeak_SetVoiceByName(voicename);
-   printf("Saying  '%s'...\n", text);
-   espeak_Synth(text, buflength, position, position_type, end_position, flags, identifier, user_data);
-   printf("Done\n");
-   return 0;
- }
- */
-
 extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 	if (!initialized) {
 		const char *hasDataPath = getenv("ESPEAK_DATA_PATH");
@@ -83,19 +71,22 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 			setenv("ESPEAK_DATA_PATH",ESPEAK_DATA_PATH,0);
 		}
 		espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, 0, NULL, 0);
-		espeak_SetVoiceByName(LANGUAGE);
 		initialized = 1;
 		fprintf(stderr, "ESPEAK_DATA_PATH=%s\n", getenv("ESPEAK_DATA_PATH"));
 
 	}
 
-	int synth_flags = espeakCHARS_16BIT | espeakCHARS_8BIT ;
 	char *str = malloc(size+1);
 	memcpy(str, data, size);
 	str[size] = 0;
-	espeak_Synth((char*) str, size+1, 0, POS_CHARACTER, 0,
-				synth_flags, NULL, NULL);
-	free(str);
+	int synth_flags = espeakCHARS_AUTO ;
+	//for (int i=0; i<N_FUZZED_LANG; i++)
+	{
+	//	espeak_SetVoiceByName(langs[i]);
+		espeak_Synth((char*) str, size+1, 0, POS_CHARACTER, 0,
+					synth_flags, NULL, NULL);
+	}
+		free(str);
 
 
 	return 0; 	
