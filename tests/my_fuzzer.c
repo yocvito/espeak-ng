@@ -80,9 +80,9 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 	memcpy(str, data, size);
 	str[size] = 0;
 	int synth_flags = espeakCHARS_AUTO ;
-	//for (int i=0; i<N_FUZZED_LANG; i++)
+	for (int i=0; i<N_FUZZED_LANG; i++)
 	{
-	//	espeak_SetVoiceByName(langs[i]);
+		espeak_SetVoiceByName(langs[i]);
 		espeak_Synth((char*) str, size+1, 0, POS_CHARACTER, 0,
 					synth_flags, NULL, NULL);
 	}
