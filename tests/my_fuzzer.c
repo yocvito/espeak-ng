@@ -26,16 +26,21 @@
 #include <espeak-ng/espeak_ng.h>
 
 /***** CONFIG *****/
-#define LANGUAGE			"en"
+#define LANGUAGE			"ru"
 #define MAX_LEN				8192
 #define ESPEAK_DATA_PATH	"/usr/lib/x86_64-linux-gnu/espeak-ng-data/"
 
-#define N_FUZZED_LANG		4
+#define N_FUZZED_LANG		9
 static const char *langs[N_FUZZED_LANG+1] = {
 	"en",
 	"fr",
 	"ru",
-	"Georgian",
+	"ka",
+	"de",
+	"cu",
+	"ba",
+	"hy",
+	"sq",
 	NULL
 };
 
@@ -82,7 +87,7 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 	int synth_flags = espeakCHARS_AUTO ;
 	for (int i=0; i<N_FUZZED_LANG; i++)
 	{
-		espeak_SetVoiceByName(langs[i]);
+		espeak_SetVoiceByName(LANGUAGE);
 		espeak_Synth((char*) str, size+1, 0, POS_CHARACTER, 0,
 					synth_flags, NULL, NULL);
 	}
