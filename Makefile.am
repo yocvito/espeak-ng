@@ -311,8 +311,8 @@ endif
 
 tests_my_fuzzer_SOURCES = tests/my_fuzzer.c
 tests_my_fuzzer_LDADD =  src/libespeak-ng.la
-tests_my_fuzzer_CFLAGS= -fsanitize=address,undefined,fuzzer -fno-omit-frame-pointer -g -fsanitize-coverage=edge -Isrc/libespeak-ng ${AM_CFLAGS}
-tests_my_fuzzer_LDFLAGS= -fsanitize=address,undefined,fuzzer -static -lm  -fsanitize-coverage=edge ${PCAUDIOLIB_LIBS}
+tests_my_fuzzer_CFLAGS= -fsanitize=address,undefined,fuzzer -fno-omit-frame-pointer -g -fsanitize-coverage=edge -Isrc/libespeak-ng -g -O2 -fdebug-prefix-map=/root=. -fstack-protector-strong -Wformat -Werror=format-security ${AM_CFLAGS}
+tests_my_fuzzer_LDFLAGS= -fsanitize=address,undefined,fuzzer -static -lm  -fsanitize-coverage=edge -Wl,-z,relro ${PCAUDIOLIB_LIBS}
 
 tests_ssml_fuzzer_SOURCES = tests/ssml-fuzzer.c
 tests_ssml_fuzzer_LDADD =  src/libespeak-ng.la
