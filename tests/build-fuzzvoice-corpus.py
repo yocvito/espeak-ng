@@ -1,13 +1,11 @@
 #!/bin/python3
 
-import errno
 import sys
 import mmap
-import os
+import argparse
 import shutil
-from os import O_RDONLY, O_RDWR, O_WRONLY, O_TRUNC, O_CREAT, SEEK_END, SEEK_CUR, SEEK_SET, close
-from tkinter import PAGES
-from typing import overload
+import os
+from os import O_RDONLY, O_RDWR, O_WRONLY, O_TRUNC, O_CREAT, SEEK_END, SEEK_CUR, SEEK_SET
 
 '''from pwn import *
 context.quiet'''
@@ -51,35 +49,34 @@ def isAscii(c):
 '''
 class Corpus:
     
-    def __init__(self, filename, output=DEFAULT_CORPUS_NAME):
-        if filename[2:] != '_list': 
-            raise Exception("filename doesn't respect requested format")
-        self.fp = open(filename, mode='rb')
-        self.filename = filename
+    def __init__(self, files, output=DEFAULT_CORPUS_NAME):
+        self.files = files
         self.output = output
         self.dict = ""
         self.dict_uni = ""
-        self.ascii_lut = [False for i in range(0, 127)]
-        self.unicode_lut = [False for i in range(0, 1112064)]
+        self.ascii_lut = [False for i in range(0, 128)]
+        self.unicode_lut = [False for i in range(0, 1112065)]
         
     '''
         build a dictonnary with all chars appearing in xx_list
     '''
     def retrieveDict(self):
-        for line in self.fp.readlines():
-            for i in range(0, len(line)):
-                
-                if i != 0:
-                    s = line[i-1: i+1] 
-                    c, ret = isUnicode(s)
-                    if ret == True and self.unicode_lut[c] is False:
-                        self.unicode_lut[c] = True
-                        self.dict_uni += chr(c)
-                
-                c = line[i]
-                if isAscii(c) and self.ascii_lut[c] is False:
-                    self.ascii_lut[c] = True
-                    self.dict += chr(c)
+        for filename in self.files:
+            with open(filename, mode='rb') as fp:
+                for line in fp.readlines():
+                    for i in range(0, len(line)):
+                        
+                        if i != 0:
+                            s = line[i-1: i+1] 
+                            c, ret = isUnicode(s)
+                            if ret == True and self.unicode_lut[c] is False:
+                                self.unicode_lut[c] = True
+                                self.dict_uni += chr(c)
+                        
+                        c = line[i]
+                        if isAscii(c) and self.ascii_lut[c] is False:
+                            self.ascii_lut[c] = True
+                            self.dict += chr(c)
                     
                        
     
@@ -166,24 +163,44 @@ class BinaryPatcher:
         mm.write(language.encode())
 
 def main(argc, argv):
-    if argc < 2:
+    if argc < 3:
         print('Build corpus file(s) and voice fuzzer for a specified language.')
         print('Usage: {} <filename> <fuzzer-binary-model>'.format(argv[0]), file=sys.stderr)
         print('  filename               --  the filename of the dictsource/xx_list file')
         print('                             (The language will be extracted from this filename so respect format: xx_list)')
         print('  fuzzer-binary-model    --  the fuzzer binary (not source) for a language to be used as an example')
         print('                             (format: xx_fuzz_voice)')
+        print('\nPLEASE Modify Corpus class if this script stop working after modifying fuzzer source code')
         exit(1)
 
-    lang = argv[1][:2]
-    binexample = argv[2]
+    ap = argparse.ArgumentParser()
+
+    # Add the arguments to the parser
+    ap.add_argument("-f", "--files", required=True,
+    help="the filenames list of the dictsource/xx_list files")
+    ap.add_argument("-b", "--fuzz_binary", required=False,
+    help="the fuzzer binary (not source) for a language to be used as an example")
+    ap.add_argument("-l", "--language", required=True,
+    help="the language of the created corpus and fuzzer binary")
+    args = vars(ap.parse_args())
+
+    files = []
+    for file in args['files'].split(','):
+        if file == '':
+            print('Error in --files format', file=sys.stderr)
+            exit(1)
+        files.append(file)
+
+    lang = args['language']
+    binexample = args['fuzz_binary']
     
-    c = Corpus(argv[1])
+    c = Corpus(files, lang + '_corpus.txt')
     c.retrieveDict()
     c.writeDictToFile()
     
-    bp = BinaryPatcher(binexample)
-    bp.patch(lang, lang + '_fuzz_voice')
+    if args['fuzz_binary'] is not None:
+        bp = BinaryPatcher(binexample)
+        bp.patch(lang, lang + '_fuzz_voice')
     
     
 
