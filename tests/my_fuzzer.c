@@ -28,6 +28,7 @@
 /***** CONFIG *****/
 #define MAX_LEN 8192
 #define ESPEAK_DATA_PATH "/usr/lib/x86_64-linux-gnu/espeak-ng-data/"
+//#define FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
 
 static int initialized = 0;
 
@@ -45,6 +46,14 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 extern int LLVMFuzzerInitialize(const int *argc, char ***argv);
 
 char *filepath = NULL;
+void MyInitPRNG() {
+#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+  // In fuzzing mode the behavior of the code should be deterministic.
+  srand(0);
+#else
+  srand(time(0));
+#endif
+}
 
 extern int LLVMFuzzerInitialize(const int *argc, char ***argv)
 {
@@ -56,6 +65,7 @@ extern int LLVMFuzzerInitialize(const int *argc, char ***argv)
 
 extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
+	//srand(0);
 	if (!initialized)
 	{
 		const char *hasDataPath = getenv("ESPEAK_DATA_PATH");
