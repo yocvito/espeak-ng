@@ -1,0 +1,278 @@
+// Emoji and Other Symbol pronunciations for Basque
+//
+// Entries with `text|emoji` in the comments have text and emoji forms. They
+// can be followed by [FE0E] to select the text style, and [FE0F] to select
+// the emoji style.
+//
+// Entries with 'other' in the comments are not defined as emoji, but are other
+// Unicode characters.
+//
+// NOTE: See `src/ucd-tools/data/espeak-ng/emoji-data.txt` for additional data
+// in interpreting ZWJ emoji sequences.
+
+$textmode
+
+// 0000..007F : C0 Controls and Basic Latin
+
+//+	plus								// [002B] other (no translation)
+
+// 0080..00FF : C1 Controls and Latin-1 Supplement
+
+//¢	cents								// [00A2] other (no translation)
+//£	pound								// [00A3] other (no translation)
+//¤	currency sign							// [00A4] other (no translation)
+//¥	yen								// [00A5] other (no translation)
+//§	section								// [00A7] other (no translation)
+//¨	double dot							// [00A8] other (no translation)
+©	copyright							// [00A9] text|emoji
+//¬	not sign							// [00AC] other (no translation)
+®	marka erregistratua						// [00AE] text|emoji
+//°	degrees								// [00B0] other (no translation)
+//±	plus or minus							// [00B1] other (no translation)
+//µ	micro								// [00B5] other (no translation)
+//¶	paragraph							// [00B6] other (no translation)
+//¼	a quarter							// [00BC] other (no translation)
+//½	a half								// [00BD] other (no translation)
+//¾	three quarters							// [00BE] other (no translation)
+//×	times								// [00D7] other (no translation)
+//÷	divided by							// [00F7] other (no translation)
+
+// 02B0..02FF : Spacing Modifier Letters
+
+//˙	dot								// [02D9] other (no translation)
+
+// 0900..097F : Devanagari
+
+//।	danda								// [0964] other (no translation)
+
+// 2000..203C : General Punctuation
+
+‼	harridura-marka bikoitza					// [203C] text|emoji
+⁉	harridura- eta galdera-ikurra					// [2049] text|emoji
+
+// 20A0..20CF : Currency Symbols
+
+//₨	rupee								// [20A8] other (no translation)
+//€	euros								// [20AC] other (no translation)
+//₹	rupee								// [20B9] other (no translation)
+
+// 2100..214F : Letterlike Symbols
+
+//№	numero								// [2116] other (no translation)
+//℞	prescription							// [211E] other (no translation)
+™	marka komertziala						// [2122] text|emoji
+ℹ	informazio-iturburua						// [2139] text|emoji
+
+// 2150..218F : Number Forms
+
+//⅓	one third							// [2153] other (no translation)
+//⅔	two thirds							// [2154] other (no translation)
+
+// 2190..21FF : Arrows
+
+//←	left arrow							// [2190] other (no translation)
+//↑	up arrow							// [2191] other (no translation)
+//→	right arrow							// [2192] other (no translation)
+//↓	down arrow							// [2193] other (no translation)
+↔	ezkerrera eta eskuinera gezia					// [2194] text|emoji
+↕	gora eta behera gezia						// [2195] text|emoji
+↖	gora eta ezkerrera gezia					// [2196] text|emoji
+↗	gora eta eskuinera gezia					// [2197] text|emoji
+↘	behera eta eskuinera gezia					// [2198] text|emoji
+↙	behera eta ezkerrera gezia					// [2199] text|emoji
+↩	ezkerrera okertzen den eskuinera gezia				// [21A9] text|emoji
+↪	eskuinera okertzen den ezkerrera gezia				// [21AA] text|emoji
+
+// 2200..22FF : Mathematical Operators
+
+//∂	delta								// [2202] other (no translation)
+//∑	sum sign							// [2211] other (no translation)
+//−	minus								// [2212] other (no translation)
+//∗	asterisk							// [2217] other (no translation)
+//√	square root							// [221A] other (no translation)
+//∛	cube root							// [221B] other (no translation)
+//∝	proportional to							// [221D] other (no translation)
+//∞	infinity							// [221E] other (no translation)
+//∫	integral							// [222B] other (no translation)
+//∬	double integral							// [222C] other (no translation)
+//∴	therefore							// [2234] other (no translation)
+//∵	because								// [2235] other (no translation)
+//≈	approximately							// [2248] other (no translation)
+//≠	not equal to							// [2260] other (no translation)
+//≡	identical to							// [2261] other (no translation)
+//≤	less or equal to						// [2264] other (no translation)
+//≥	greater or equal to						// [2265] other (no translation)
+
+// 2300..23FF : Miscellaneous Technical
+
+⌚	erlojua								// [231A]
+⌛	harea-erloju							// [231B]
+⌨	teklatua							// [2328] text|emoji
+⏏	ateratzeko botoia						// [23CF] text|emoji
+⏩	aurrera egiteko botoia						// [23E9]
+⏪	atzera egiteko botoia						// [23EA]
+⏫	gora bizkor egiteko botoia					// [23EB]
+⏬	behera bizkor egiteko botoia					// [23EC]
+⏭	hurrengo abestira joateko botoia				// [23ED] text|emoji
+⏮	azken abestia erreproduzitzeko botoia				// [23EE] text|emoji
+⏯	erreproduzitzeko edo pausatzeko botoia				// [23EF] text|emoji
+⏰	alarma								// [23F0]
+⏱	kronometroa							// [23F1] text|emoji
+⏲	tenporizadorea							// [23F2] text|emoji
+⏳	harea-erlojua harea dariola					// [23F3]
+⏸	pausatzeko botoia						// [23F8] text|emoji
+⏹	gelditzeko botoia						// [23F9] text|emoji
+⏺	grabatzeko botoia						// [23FA] text|emoji
+
+// 2460..24FF : Enclosed Alphanumerics
+
+Ⓜ	m” hizkia zirkulu batean					// [24C2] text|emoji
+
+// 25A0..25FF : Geometric Shapes
+
+//■	black square							// [25A0] other (no translation)
+▪	karratu beltz txikia						// [25AA] text|emoji
+▫	karratu zuri txikia						// [25AB] text|emoji
+▶	erreproduzitzeko botoia						// [25B6] text|emoji
+◀	alderantziz erreproduzitzeko botoia				// [25C0] text|emoji
+//●	black circle							// [25CF] other (no translation)
+◻	karratu zuri ertaina						// [25FB] text|emoji
+◼	karratu beltz ertaina						// [25FC] text|emoji
+◽	karratu zuri ertaina/txikia					// [25FD]
+◾	karratu beltz ertaina/txikia					// [25FE]
+
+// 2600..26FF : Miscellaneous Symbols
+
+☀	eguzkia								// [2600] text|emoji
+☁	hodei								// [2601] text|emoji
+☂	aterki								// [2602] text|emoji
+☃	elurrezko gizona						// [2603] text|emoji
+☄	kometa								// [2604] text|emoji
+☎	telefonoa							// [260E] text|emoji
+☑	tileta duen koadroa						// [2611] text|emoji
+☔	aterkia euri-tantekin						// [2614]
+☕	edari beroa							// [2615]
+☘	hirusta								// [2618] text|emoji
+☝	gora se// Emoji and Other Symbol pronunciations for Basque
+//
+// Entries with `text|emoji` in the comments have text and emoji forms. They
+// can be followed by [FE0E] to select the text style, and [FE0F] to select
+// the emoji style.
+//
+// Entries with 'other' in the comments are not defined as emoji, but are other
+// Unicode characters.
+//
+// NOTE: See `src/ucd-tools/data/espeak-ng/emoji-data.txt` for additional data
+// in interpreting ZWJ emoji sequences.
+
+$textmode
+
+// 0000..007F : C0 Controls and Basic Latin
+
+//+	plus								// [002B] other (no translation)
+
+// 0080..00FF : C1 Controls and Latin-1 Supplement
+
+//¢	cents								// [00A2] other (no translation)
+//£	pound								// [00A3] other (no translation)
+//¤	currency sign							// [00A4] other (no translation)
+//¥	yen								// [00A5] other (no translation)
+//§	section								// [00A7] other (no translation)
+//¨	double dot							// [00A8] other (no translation)
+©	copyright							// [00A9] text|emoji
+//¬	not sign							// [00AC] other (no translation)
+®	marka erregistratua						// [00AE] text|emoji
+//°	degrees								// [00B0] other (no translation)
+//±	plus or minus							// [00B1] other (no translation)
+//µ	micro								// [00B5] other (no translation)
+//¶	paragraph							// [00B6] other (no translation)
+//¼	a quarter							// [00BC] other (no translation)
+//½	a half								// [00BD] other (no translation)
+//¾	three quarters							// [00BE] other (no translation)
+//×	times								// [00D7] other (no translation)
+//÷	divided by							// [00F7] other (no translation)
+
+// 02B0..02FF : Spacing Modifier Letters
+
+//˙	dot								// [02D9] other (no translation)
+
+// 0900..097F : Devanagari
+
+//।	danda								// [0964] other (no translation)
+
+// 2000..203C : General Punctuation
+
+‼	harridura-marka bikoitza					// [203C] text|emoji
+⁉	harridura- eta galdera-ikurra					// [2049] text|emoji
+
+// 20A0..20CF : Currency Symbols
+
+//₨	rupee								// [20A8] other (no translation)
+//€	euros								// [20AC] other (no translation)
+//₹	rupee								// [20B9] other (no translation)
+
+// 2100..214F : Letterlike Symbols
+
+//№	numero								// [2116] other (no translation)
+//℞	prescription							// [211E] other (no translation)
+™	marka komertziala						// [2122] text|emoji
+ℹ	informazio-iturburua						// [2139] text|emoji
+
+// 2150..218F : Number Forms
+
+//⅓	one third							// [2153] other (no translation)
+//⅔	two thirds							// [2154] other (no translation)
+
+// 2190..21FF : Arrows
+
+//←	left arrow							// [2190] other (no translation)
+//↑	up arrow							// [2191] other (no translation)
+//→	right arrow							// [2192] other (no translation)
+//↓	down arrow							// [2193] other (no translation)
+↔	ezkerrera eta eskuinera gezia					// [2194] text|emoji
+↕	gora eta behera gezia						// [2195] text|emoji
+↖	gora eta ezkerrera gezia					// [2196] text|emoji
+↗	gora eta eskuinera gezia					// [2197] text|emoji
+↘	behera eta eskuinera gezia					// [2198] text|emoji
+↙	behera eta ezkerrera gezia					// [2199] text|emoji
+↩	ezkerrera okertzen den eskuinera gezia				// [21A9] text|emoji
+↪	eskuinera okertzen den ezkerrera gezia				// [21AA] text|emoji
+
+// 2200..22FF : Mathematical Operators
+
+//∂	delta								// [2202] other (no translation)
+//∑	sum sign							// [2211] other (no translation)
+//−	minus								// [2212] other (no translation)
+//∗	asterisk							// [2217] other (no translation)
+//√	square root							// [221A] other (no translation)
+//∛	cube root							// [221B] other (no translation)
+//∝	proportional to							// [221D] other (no translation)
+//∞	infinity							// [221E] other (no translation)
+//∫	integral							// [222B] other (no translation)
+//∬	double integral							// [222C] other (no translation)
+//∴	therefore							// [2234] other (no translation)
+//∵	because								// [2235] other (no translation)
+//≈	approximately							// [2248] other (no translation)
+//≠	not equal to							// [2260] other (no translation)
+//≡	identical to							// [2261] other (no translation)
+//≤	less or equal to						// [2264] other (no translation)
+//≥	greater or equal to						// [2265] other (no translation)
+
+// 2300..23FF : Miscellaneous Technical
+
+⌚	erlojua								// [231A]
+⌛	harea-erloju							// [231B]
+⌨	teklatua							// [2328] text|emoji
+⏏	ateratzeko botoia						// [23CF] text|emoji
+⏩	aurrera egiteko botoia						// [23E9]
+⏪	atzera egiteko botoia						// [23EA]
+⏫	gora bizkor egiteko botoia					// [23EB]
+⏬	behera bizkor egiteko botoia					// [23EC]
+⏭	hurrengo abestira joatekinalatzen ari den hatz erakuslea				// [261D] text|emoji
+☠	buru-hezurra eta hezur gurutzatuak				// [2620] text|emoji
+☢	erradioaktiboa							// [2622] text|emoji
+☣	arrisku biologikoa						// [2623] text|emoji
+☦	gurutze ortodoxoa						// [2626] text|emoji
+☪	izarra eta ilargierdia						// [262A] text|emoji
+☮	bakearen ikurrao botoia				// [23ED] text|emoji
+⏮	azken abestia erreproduzitzeko botoia						// [	2

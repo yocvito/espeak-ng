@@ -321,7 +321,7 @@ else
 	have_libfuzzer=no
 fi
 
-AM_CONDITIONAL(HAVE_LIBFUZZER, [test x"$have_libfuzzer" = xyes])
+AM_CONDITIONAL(HAVE_LIBFUZZER, [test x"$have_libfuzzer" = xyes], [test x"$CC" = clang])
 
 dnl ================================================================
 dnl Generate output.
@@ -363,3 +363,8 @@ AC_MSG_NOTICE([
             Chinese (Mandarin):        ${have_extdict_cmn}
             Chinese (Cantonese):       ${have_extdict_yue}
 ])
+
+AC_ARG_WITH([coverage],
+    [AS_HELP_STRING([--with-coverage], [enable clang coverage in the fuzzer tests (also add coverage to lib sources) @<:@default=no@:>@])],
+    [])
+AM_CONDITIONAL(USE_COVERAGE, [test x"$with_coverage" = xyes])

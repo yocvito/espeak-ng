@@ -1,0 +1,806 @@
+/home/kmamadoudram/MasterCSI/semestre2/ter/test/espeak-ng/src/include/espeak-ng/speak_lib.h:
+    1|       |#ifndef SPEAK_LIB_H
+    2|       |#define SPEAK_LIB_H
+    3|       |/***************************************************************************
+    4|       | *   Copyright (C) 2005 to 2012 by Jonathan Duddington                     *
+    5|       | *   email: jonsd@users.sourceforge.net                                    *
+    6|       | *                                                                         *
+    7|       | *   This program is free software; you can redistribute it and/or modify  *
+    8|       | *   it under the terms of the GNU General Public License as published by  *
+    9|       | *   the Free Software Foundation; either version 3 of the License, or     *
+   10|       | *   (at your option) any later version.                                   *
+   11|       | *                                                                         *
+   12|       | *   This program is distributed in the hope that it will be useful,       *
+   13|       | *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+   14|       | *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+   15|       | *   GNU General Public License for more details.                          *
+   16|       | *                                                                         *
+   17|       | *   You should have received a copy of the GNU General Public License     *
+   18|       | *   along with this program; if not, see:                                 *
+   19|       | *               <http://www.gnu.org/licenses/>.                           *
+   20|       | ***************************************************************************/
+   21|       |
+   22|       |
+   23|       |/*************************************************************/
+   24|       |/* This is the header file for the library version of espeak */
+   25|       |/*                                                           */
+   26|       |/*************************************************************/
+   27|       |
+   28|       |#include <stdio.h>
+   29|       |#include <stddef.h>
+   30|       |
+   31|       |#if defined(_WIN32) || defined(_WIN64)
+   32|       |#ifdef LIBESPEAK_NG_EXPORT
+   33|       |#define ESPEAK_API __declspec(dllexport)
+   34|       |#else
+   35|       |#define ESPEAK_API __declspec(dllimport)
+   36|       |#endif
+   37|       |#else
+   38|       |#define ESPEAK_API
+   39|       |#endif
+   40|       |
+   41|       |#define ESPEAK_API_REVISION  12
+   42|       |/*
+   43|       |Revision 2
+   44|       |   Added parameter "options" to eSpeakInitialize()
+   45|       |
+   46|       |Revision 3
+   47|       |   Added espeakWORDGAP to  espeak_PARAMETER
+   48|       |
+   49|       |Revision 4
+   50|       |   Added flags parameter to espeak_CompileDictionary()
+   51|       |
+   52|       |Revision 5
+   53|       |   Added espeakCHARS_16BIT
+   54|       |
+   55|       |Revision 6
+   56|       |  Added macros: espeakRATE_MINIMUM, espeakRATE_MAXIMUM, espeakRATE_NORMAL
+   57|       |
+   58|       |Revision 7  24.Dec.2011
+   59|       |  Changed espeak_EVENT structure to add id.string[] for phoneme mnemonics.
+   60|       |  Added espeakINITIALIZE_PHONEME_IPA option for espeak_Initialize() to report phonemes as IPA names.
+   61|       |
+   62|       |Revision 8  26.Apr.2013
+   63|       |  Added function espeak_TextToPhonemes().
+   64|       |
+   65|       |Revision 9  30.May.2013
+   66|       |  Changed function espeak_TextToPhonemes().
+   67|       |
+   68|       |Revision 10 29.Aug.2014
+   69|       |  Changed phonememode parameter to espeak_TextToPhonemes() and espeak_SetPhonemeTrace
+   70|       |
+   71|       |Revision 11 (espeak-ng)
+   72|       |  Made ESPEAK_API import/export symbols correctly on Windows.
+   73|       |
+   74|       |Revision 12 (espeak-ng)
+   75|       |  Exposed espeak_SetPhonemeCallback. This is available in eSpeak, but was not exposed in this header.
+   76|       |
+   77|       |*/
+   78|       |         /********************/
+   79|       |         /*  Initialization  */
+   80|       |         /********************/
+   81|       |
+   82|       |// values for 'value' in espeak_SetParameter(espeakRATE, value, 0), nominally in words-per-minute
+   83|       |#define espeakRATE_MINIMUM  80
+   84|       |#define espeakRATE_MAXIMUM  450
+   85|       |#define espeakRATE_NORMAL   175
+   86|       |
+   87|       |
+   88|       |typedef enum {
+   89|       |  espeakEVENT_LIST_TERMINATED = 0, // Retrieval mode: terminates the event list.
+   90|       |  espeakEVENT_WORD = 1,            // Start of word
+   91|       |  espeakEVENT_SENTENCE = 2,        // Start of sentence
+   92|       |  espeakEVENT_MARK = 3,            // Mark
+   93|       |  espeakEVENT_PLAY = 4,            // Audio element
+   94|       |  espeakEVENT_END = 5,             // End of sentence or clause
+   95|       |  espeakEVENT_MSG_TERMINATED = 6,  // End of message
+   96|       |  espeakEVENT_PHONEME = 7,         // Phoneme, if enabled in espeak_Initialize()
+   97|       |  espeakEVENT_SAMPLERATE = 8       // internal use, set sample rate
+   98|       |} espeak_EVENT_TYPE;
+   99|       |
+  100|       |
+  101|       |
+  102|       |typedef struct {
+  103|       |	espeak_EVENT_TYPE type;
+  104|       |	unsigned int unique_identifier; // message identifier (or 0 for key or character)
+  105|       |	int text_position;    // the number of characters from the start of the text
+  106|       |	int length;           // word length, in characters (for espeakEVENT_WORD)
+  107|       |	int audio_position;   // the time in mS within the generated speech output data
+  108|       |	int sample;           // sample id (internal use)
+  109|       |	void* user_data;      // pointer supplied by the calling program
+  110|       |	union {
+  111|       |		int number;        // used for WORD and SENTENCE events.
+  112|       |		const char *name;  // used for MARK and PLAY events.  UTF8 string
+  113|       |		char string[8];    // used for phoneme names (UTF8). Terminated by a zero byte unless the name needs the full 8 bytes.
+  114|       |	} id;
+  115|       |} espeak_EVENT;
+  116|       |/*
+  117|       |   When a message is supplied to espeak_synth, the request is buffered and espeak_synth returns. When the message is really processed, the callback function will be repetedly called.
+  118|       |
+  119|       |
+  120|       |   In RETRIEVAL mode, the callback function supplies to the calling program the audio data and an event list terminated by 0 (LIST_TERMINATED).
+  121|       |
+  122|       |   In PLAYBACK mode, the callback function is called as soon as an event happens.
+  123|       |
+  124|       |   For example suppose that the following message is supplied to espeak_Synth:
+  125|       |   "hello, hello."
+  126|       |
+  127|       |
+  128|       |   * Once processed in RETRIEVAL mode, it could lead to 3 calls of the callback function :
+  129|       |
+  130|       |   ** Block 1:
+  131|       |   <audio data> +
+  132|       |   List of events: SENTENCE + WORD + LIST_TERMINATED
+  133|       |
+  134|       |   ** Block 2:
+  135|       |   <audio data> +
+  136|       |   List of events: WORD + END + LIST_TERMINATED
+  137|       |
+  138|       |   ** Block 3:
+  139|       |   no audio data
+  140|       |   List of events: MSG_TERMINATED + LIST_TERMINATED
+  141|       |
+  142|       |
+  143|       |   * Once processed in PLAYBACK mode, it could lead to 5 calls of the callback function:
+  144|       |
+  145|       |   ** SENTENCE
+  146|       |   ** WORD (call when the sounds are actually played)
+  147|       |   ** WORD
+  148|       |   ** END (call when the end of sentence is actually played.)
+  149|       |   ** MSG_TERMINATED
+  150|       |
+  151|       |
+  152|       |   The MSG_TERMINATED event is the last event. It can inform the calling program to clear the user data related to the message.
+  153|       |   So if the synthesis must be stopped, the callback function is called for each pending message with the MSG_TERMINATED event.
+  154|       |
+  155|       |   A MARK event indicates a <mark> element in the text.
+  156|       |   A PLAY event indicates an <audio> element in the text, for which the calling program should play the named sound file.
+  157|       |*/
+  158|       |
+  159|       |
+  160|       |
+  161|       |typedef enum {
+  162|       |	POS_CHARACTER = 1,
+  163|       |	POS_WORD,
+  164|       |	POS_SENTENCE
+  165|       |} espeak_POSITION_TYPE;
+  166|       |
+  167|       |
+  168|       |typedef enum {
+  169|       |	/* PLAYBACK mode: plays the audio data, supplies events to the calling program*/
+  170|       |	AUDIO_OUTPUT_PLAYBACK,
+  171|       |
+  172|       |	/* RETRIEVAL mode: supplies audio data and events to the calling program */
+  173|       |	AUDIO_OUTPUT_RETRIEVAL,
+  174|       |
+  175|       |	/* SYNCHRONOUS mode: as RETRIEVAL but doesn't return until synthesis is completed */
+  176|       |	AUDIO_OUTPUT_SYNCHRONOUS,
+  177|       |
+  178|       |	/* Synchronous playback */
+  179|       |	AUDIO_OUTPUT_SYNCH_PLAYBACK
+  180|       |
+  181|       |} espeak_AUDIO_OUTPUT;
+  182|       |
+  183|       |
+  184|       |typedef enum {
+  185|       |	EE_OK=0,
+  186|       |	EE_INTERNAL_ERROR=-1,
+  187|       |	EE_BUFFER_FULL=1,
+  188|       |	EE_NOT_FOUND=2
+  189|       |} espeak_ERROR;
+  190|       |
+  191|       |#define espeakINITIALIZE_PHONEME_EVENTS 0x0001
+  192|       |#define espeakINITIALIZE_PHONEME_IPA   0x0002
+  193|       |#define espeakINITIALIZE_DONT_EXIT     0x8000
+  194|       |
+  195|       |#ifdef __cplusplus
+  196|       |extern "C"
+  197|       |#endif
+  198|       |ESPEAK_API int espeak_Initialize(espeak_AUDIO_OUTPUT output, int buflength, const char *path, int options);
+  199|       |/* Must be called before any synthesis functions are called.
+  200|       |   output: the audio data can either be played by eSpeak or passed back by the SynthCallback function.
+  201|       |
+  202|       |   buflength:  The length in mS of sound buffers passed to the SynthCallback function.
+  203|       |            Value=0 gives a default of 60mS.
+  204|       |            This parameter is only used for AUDIO_OUTPUT_RETRIEVAL and AUDIO_OUTPUT_SYNCHRONOUS modes.
+  205|       |
+  206|       |   path: The directory which contains the espeak-ng-data directory, or NULL for the default location.
+  207|       |
+  208|       |   options: bit 0:  1=allow espeakEVENT_PHONEME events.
+  209|       |            bit 1:  1= espeakEVENT_PHONEME events give IPA phoneme names, not eSpeak phoneme names
+  210|       |            bit 15: 1=don't exit if espeak_data is not found (used for --help)
+  211|       |
+  212|       |   Returns: sample rate in Hz, or -1 (EE_INTERNAL_ERROR).
+  213|       |*/
+  214|       |
+  215|       |typedef int (t_espeak_callback)(short*, int, espeak_EVENT*);
+  216|       |
+  217|       |#ifdef __cplusplus
+  218|       |extern "C"
+  219|       |#endif
+  220|       |ESPEAK_API void espeak_SetSynthCallback(t_espeak_callback* SynthCallback);
+  221|       |/* Must be called before any synthesis functions are called.
+  222|       |   This specifies a function in the calling program which is called when a buffer of
+  223|       |   speech sound data has been produced.
+  224|       |
+  225|       |
+  226|       |   The callback function is of the form:
+  227|       |
+  228|       |int SynthCallback(short *wav, int numsamples, espeak_EVENT *events);
+  229|       |
+  230|       |   wav:  is the speech sound data which has been produced.
+  231|       |      NULL indicates that the synthesis has been completed.
+  232|       |
+  233|       |   numsamples: is the number of entries in wav.  This number may vary, may be less than
+  234|       |      the value implied by the buflength parameter given in espeak_Initialize, and may
+  235|       |      sometimes be zero (which does NOT indicate end of synthesis).
+  236|       |
+  237|       |   events: an array of espeak_EVENT items which indicate word and sentence events, and
+  238|       |      also the occurrence if <mark> and <audio> elements within the text.  The list of
+  239|       |      events is terminated by an event of type = 0.
+  240|       |
+  241|       |
+  242|       |   Callback returns: 0=continue synthesis,  1=abort synthesis.
+  243|       |*/
+  244|       |
+  245|       |#ifdef __cplusplus
+  246|       |extern "C"
+  247|       |#endif
+  248|       |ESPEAK_API void espeak_SetUriCallback(int (*UriCallback)(int, const char*, const char*));
+  249|       |/* This function may be called before synthesis functions are used, in order to deal with
+  250|       |   <audio> tags.  It specifies a callback function which is called when an <audio> element is
+  251|       |   encountered and allows the calling program to indicate whether the sound file which
+  252|       |   is specified in the <audio> element is available and is to be played.
+  253|       |
+  254|       |   The callback function is of the form:
+  255|       |
+  256|       |int UriCallback(int type, const char *uri, const char *base);
+  257|       |
+  258|       |   type:  type of callback event.  Currently only 1= <audio> element
+  259|       |
+  260|       |   uri:   the "src" attribute from the <audio> element
+  261|       |
+  262|       |   base:  the "xml:base" attribute (if any) from the <speak> element
+  263|       |
+  264|       |   Return: 1=don't play the sound, but speak the text alternative.
+  265|       |           0=place a PLAY event in the event list at the point where the <audio> element
+  266|       |             occurs.  The calling program can then play the sound at that point.
+  267|       |*/
+  268|       |
+  269|       |#ifdef __cplusplus
+  270|       |extern "C"
+  271|       |#endif
+  272|       |ESPEAK_API void espeak_SetPhonemeCallback(int (*PhonemeCallback)(const char *));
+  273|       |
+  274|       |
+  275|       |         /********************/
+  276|       |         /*    Synthesis     */
+  277|       |         /********************/
+  278|       |
+  279|       |
+  280|      0|#define espeakCHARS_AUTO   0
+  281|       |#define espeakCHARS_UTF8   1
+  282|       |#define espeakCHARS_8BIT   2
+  283|       |#define espeakCHARS_WCHAR  3
+  284|       |#define espeakCHARS_16BIT  4
+  285|       |
+  286|       |#define espeakSSML        0x10
+  287|       |#define espeakPHONEMES    0x100
+  288|       |#define espeakENDPAUSE    0x1000
+  289|       |#define espeakKEEP_NAMEDATA 0x2000
+  290|       |
+  291|       |#ifdef __cplusplus
+  292|       |extern "C"
+  293|       |#endif
+  294|       |ESPEAK_API espeak_ERROR espeak_Synth(const void *text,
+  295|       |	size_t size,
+  296|       |	unsigned int position,
+  297|       |	espeak_POSITION_TYPE position_type,
+  298|       |	unsigned int end_position,
+  299|       |	unsigned int flags,
+  300|       |	unsigned int* unique_identifier,
+  301|       |	void* user_data);
+  302|       |/* Synthesize speech for the specified text.  The speech sound data is passed to the calling
+  303|       |   program in buffers by means of the callback function specified by espeak_SetSynthCallback(). The command is asynchronous: it is internally buffered and returns as soon as possible. If espeak_Initialize was previously called with AUDIO_OUTPUT_PLAYBACK as argument, the sound data are played by eSpeak.
+  304|       |
+  305|       |   text: The text to be spoken, terminated by a zero character. It may be either 8-bit characters,
+  306|       |      wide characters (wchar_t), or UTF8 encoding.  Which of these is determined by the "flags"
+  307|       |      parameter.
+  308|       |
+  309|       |   size: Equal to (or greatrer than) the size of the text data, in bytes.  This is used in order
+  310|       |      to allocate internal storage space for the text.  This value is not used for
+  311|       |      AUDIO_OUTPUT_SYNCHRONOUS mode.
+  312|       |
+  313|       |   position:  The position in the text where speaking starts. Zero indicates speak from the
+  314|       |      start of the text.
+  315|       |
+  316|       |   position_type:  Determines whether "position" is a number of characters, words, or sentences.
+  317|       |      Values:
+  318|       |
+  319|       |   end_position:  If set, this gives a character position at which speaking will stop.  A value
+  320|       |      of zero indicates no end position.
+  321|       |
+  322|       |   flags:  These may be OR'd together:
+  323|       |      Type of character codes, one of:
+  324|       |         espeakCHARS_UTF8     UTF8 encoding
+  325|       |         espeakCHARS_8BIT     The 8 bit ISO-8859 character set for the particular language.
+  326|       |         espeakCHARS_AUTO     8 bit or UTF8  (this is the default)
+  327|       |         espeakCHARS_WCHAR    Wide characters (wchar_t)
+  328|       |         espeakCHARS_16BIT    16 bit characters.
+  329|       |
+  330|       |      espeakSSML   Elements within < > are treated as SSML elements, or if not recognised are ignored.
+  331|       |
+  332|       |      espeakPHONEMES  Text within [[ ]] is treated as phonemes codes (in espeak's Kirshenbaum encoding).
+  333|       |
+  334|       |      espeakENDPAUSE  If set then a sentence pause is added at the end of the text.  If not set then
+  335|       |         this pause is suppressed.
+  336|       |
+  337|       |   unique_identifier: This must be either NULL, or point to an integer variable to
+  338|       |       which eSpeak writes a message identifier number.
+  339|       |       eSpeak includes this number in espeak_EVENT messages which are the result of
+  340|       |       this call of espeak_Synth().
+  341|       |
+  342|       |   user_data: a pointer (or NULL) which will be passed to the callback function in
+  343|       |       espeak_EVENT messages.
+  344|       |
+  345|       |   Return: EE_OK: operation achieved
+  346|       |           EE_BUFFER_FULL: the command can not be buffered;
+  347|       |             you may try after a while to call the function again.
+  348|       |	   EE_INTERNAL_ERROR.
+  349|       |*/
+  350|       |
+  351|       |#ifdef __cplusplus
+  352|       |extern "C"
+  353|       |#endif
+  354|       |ESPEAK_API espeak_ERROR espeak_Synth_Mark(const void *text,
+  355|       |	size_t size,
+  356|       |	const char *index_mark,
+  357|       |	unsigned int end_position,
+  358|       |	unsigned int flags,
+  359|       |	unsigned int* unique_identifier,
+  360|       |	void* user_data);
+  361|       |/* Synthesize speech for the specified text.  Similar to espeak_Synth() but the start position is
+  362|       |   specified by the name of a <mark> element in the text.
+  363|       |
+  364|       |   index_mark:  The "name" attribute of a <mark> element within the text which specified the
+  365|       |      point at which synthesis starts.  UTF8 string.
+  366|       |
+  367|       |   For the other parameters, see espeak_Synth()
+  368|       |
+  369|       |   Return: EE_OK: operation achieved
+  370|       |           EE_BUFFER_FULL: the command can not be buffered;
+  371|       |             you may try after a while to call the function again.
+  372|       |	   EE_INTERNAL_ERROR.
+  373|       |*/
+  374|       |
+  375|       |#ifdef __cplusplus
+  376|       |extern "C"
+  377|       |#endif
+  378|       |ESPEAK_API espeak_ERROR espeak_Key(const char *key_name);
+  379|       |/* Speak the name of a keyboard key.
+  380|       |   If key_name is a single character, it speaks the name of the character.
+  381|       |   Otherwise, it speaks key_name as a text string.
+  382|       |
+  383|       |   Return: EE_OK: operation achieved
+  384|       |           EE_BUFFER_FULL: the command can not be buffered;
+  385|       |             you may try after a while to call the function again.
+  386|       |	   EE_INTERNAL_ERROR.
+  387|       |*/
+  388|       |
+  389|       |#ifdef __cplusplus
+  390|       |extern "C"
+  391|       |#endif
+  392|       |ESPEAK_API espeak_ERROR espeak_Char(wchar_t character);
+  393|       |/* Speak the name of the given character
+  394|       |
+  395|       |   Return: EE_OK: operation achieved
+  396|       |           EE_BUFFER_FULL: the command can not be buffered;
+  397|       |             you may try after a while to call the function again.
+  398|       |	   EE_INTERNAL_ERROR.
+  399|       |*/
+  400|       |
+  401|       |
+  402|       |
+  403|       |
+  404|       |         /***********************/
+  405|       |         /*  Speech Parameters  */
+  406|       |         /***********************/
+  407|       |
+  408|       |typedef enum {
+  409|       |  espeakSILENCE=0, /* internal use */
+  410|       |  espeakRATE=1,
+  411|       |  espeakVOLUME=2,
+  412|       |  espeakPITCH=3,
+  413|       |  espeakRANGE=4,
+  414|       |  espeakPUNCTUATION=5,
+  415|       |  espeakCAPITALS=6,
+  416|       |  espeakWORDGAP=7,
+  417|       |  espeakOPTIONS=8,   // reserved for misc. options.  not yet used
+  418|       |  espeakINTONATION=9,
+  419|       |
+  420|       |  espeakRESERVED1=10,
+  421|       |  espeakRESERVED2=11,
+  422|       |  espeakEMPHASIS,   /* internal use */
+  423|       |  espeakLINELENGTH, /* internal use */
+  424|       |  espeakVOICETYPE,  // internal, 1=mbrola
+  425|       |  N_SPEECH_PARAM    /* last enum */
+  426|       |} espeak_PARAMETER;
+  427|       |
+  428|       |typedef enum {
+  429|       |  espeakPUNCT_NONE=0,
+  430|       |  espeakPUNCT_ALL=1,
+  431|       |  espeakPUNCT_SOME=2
+  432|       |} espeak_PUNCT_TYPE;
+  433|       |
+  434|       |#ifdef __cplusplus
+  435|       |extern "C"
+  436|       |#endif
+  437|       |ESPEAK_API espeak_ERROR espeak_SetParameter(espeak_PARAMETER parameter, int value, int relative);
+  438|       |/* Sets the value of the specified parameter.
+  439|       |   relative=0   Sets the absolute value of the parameter.
+  440|       |   relative=1   Sets a relative value of the parameter.
+  441|       |
+  442|       |   parameter:
+  443|       |      espeakRATE:    speaking speed in word per minute.  Values 80 to 450.
+  444|       |
+  445|       |      espeakVOLUME:  volume in range 0-200 or more.
+  446|       |                     0=silence, 100=normal full volume, greater values may produce amplitude compression or distortion
+  447|       |
+  448|       |      espeakPITCH:   base pitch, range 0-100.  50=normal
+  449|       |
+  450|       |      espeakRANGE:   pitch range, range 0-100. 0-monotone, 50=normal
+  451|       |
+  452|       |      espeakPUNCTUATION:  which punctuation characters to announce:
+  453|       |         value in espeak_PUNCT_TYPE (none, all, some),
+  454|       |         see espeak_GetParameter() to specify which characters are announced.
+  455|       |
+  456|       |      espeakCAPITALS: announce capital letters by:
+  457|       |         0=none,
+  458|       |         1=sound icon,
+  459|       |         2=spelling,
+  460|       |         3 or higher, by raising pitch.  This values gives the amount in Hz by which the pitch
+  461|       |            of a word raised to indicate it has a capital letter.
+  462|       |
+  463|       |      espeakWORDGAP:  pause between words, units of 10mS (at the default speed)
+  464|       |
+  465|       |   Return: EE_OK: operation achieved
+  466|       |           EE_BUFFER_FULL: the command can not be buffered;
+  467|       |             you may try after a while to call the function again.
+  468|       |	   EE_INTERNAL_ERROR.
+  469|       |*/
+  470|       |
+  471|       |#ifdef __cplusplus
+  472|       |extern "C"
+  473|       |#endif
+  474|       |ESPEAK_API int espeak_GetParameter(espeak_PARAMETER parameter, int current);
+  475|       |/* current=0  Returns the default value of the specified parameter.
+  476|       |   current=1  Returns the current value of the specified parameter, as set by SetParameter()
+  477|       |*/
+  478|       |
+  479|       |#ifdef __cplusplus
+  480|       |extern "C"
+  481|       |#endif
+  482|       |ESPEAK_API espeak_ERROR espeak_SetPunctuationList(const wchar_t *punctlist);
+  483|       |/* Specified a list of punctuation characters whose names are to be spoken when the
+  484|       |   value of the Punctuation parameter is set to "some".
+  485|       |
+  486|       |   punctlist:  A list of character codes, terminated by a zero character.
+  487|       |
+  488|       |   Return: EE_OK: operation achieved
+  489|       |           EE_BUFFER_FULL: the command can not be buffered;
+  490|       |             you may try after a while to call the function again.
+  491|       |	   EE_INTERNAL_ERROR.
+  492|       |*/
+  493|       |
+  494|       |#define espeakPHONEMES_SHOW    0x01
+  495|       |#define espeakPHONEMES_IPA     0x02
+  496|       |#define espeakPHONEMES_TRACE   0x08
+  497|       |#define espeakPHONEMES_MBROLA  0x10
+  498|       |#define espeakPHONEMES_TIE     0x80
+  499|       |
+  500|       |#ifdef __cplusplus
+  501|       |extern "C"
+  502|       |#endif
+  503|       |ESPEAK_API void espeak_SetPhonemeTrace(int phonememode, FILE *stream);
+  504|       |/* phonememode:  Controls the output of phoneme symbols for the text
+  505|       |      bits 0-2:
+  506|       |         value=0  No phoneme output (default)
+  507|       |         value=1  Output the translated phoneme symbols for the text
+  508|       |         value=2  as (1), but produces IPA phoneme names rather than ascii
+  509|       |      bit 3:   output a trace of how the translation was done (showing the matching rules and list entries)
+  510|       |      bit 4:   produce pho data for mbrola
+  511|       |      bit 7:   use (bits 8-23) as a tie within multi-letter phonemes names
+  512|       |      bits 8-23:  separator character, between phoneme names
+  513|       |
+  514|       |   stream   output stream for the phoneme symbols (and trace).  If stream=NULL then it uses stdout.
+  515|       |*/
+  516|       |
+  517|       |#ifdef __cplusplus
+  518|       |extern "C"
+  519|       |#endif
+  520|       |ESPEAK_API const char *espeak_TextToPhonemes(const void **textptr, int textmode, int phonememode);
+  521|       |/* Translates text into phonemes.  Call espeak_SetVoiceByName() first, to select a language.
+  522|       |
+  523|       |   It returns a pointer to a character string which contains the phonemes for the text up to
+  524|       |   end of a sentence, or comma, semicolon, colon, or similar punctuation.
+  525|       |
+  526|       |   textptr: The address of a pointer to the input text which is terminated by a zero character.
+  527|       |      On return, the pointer has been advanced past the text which has been translated, or else set
+  528|       |      to NULL to indicate that the end of the text has been reached.
+  529|       |
+  530|       |   textmode: Type of character codes, one of:
+  531|       |         espeakCHARS_UTF8     UTF8 encoding
+  532|       |         espeakCHARS_8BIT     The 8 bit ISO-8859 character set for the particular language.
+  533|       |         espeakCHARS_AUTO     8 bit or UTF8  (this is the default)
+  534|       |         espeakCHARS_WCHAR    Wide characters (wchar_t)
+  535|       |         espeakCHARS_16BIT    16 bit characters.
+  536|       |
+  537|       |   phoneme_mode
+  538|       |	    bit 1:   0=eSpeak's ascii phoneme names, 1= International Phonetic Alphabet (as UTF-8 characters).
+  539|       |        bit 7:   use (bits 8-23) as a tie within multi-letter phonemes names
+  540|       |        bits 8-23:  separator character, between phoneme names
+  541|       |
+  542|       |*/
+  543|       |
+  544|       |#ifdef __cplusplus
+  545|       |extern "C"
+  546|       |#endif
+  547|       |ESPEAK_API void espeak_CompileDictionary(const char *path, FILE *log, int flags);
+  548|       |/* Compile pronunciation dictionary for a language which corresponds to the currently
+  549|       |   selected voice.  The required voice should be selected before calling this function.
+  550|       |
+  551|       |   path:  The directory which contains the language's '_rules' and '_list' files.
+  552|       |          'path' should end with a path separator character ('/').
+  553|       |   log:   Stream for error reports and statistics information. If log=NULL then stderr will be used.
+  554|       |
+  555|       |   flags:  Bit 0: include source line information for debug purposes (This is displayed with the
+  556|       |          -X command line option).
+  557|       |*/
+  558|       |         /***********************/
+  559|       |         /*   Voice Selection   */
+  560|       |         /***********************/
+  561|       |
+  562|       |
+  563|       |// voice table
+  564|       |typedef struct {
+  565|       |	const char *name;      // a given name for this voice. UTF8 string.
+  566|       |	const char *languages;       // list of pairs of (byte) priority + (string) language (and dialect qualifier)
+  567|       |	const char *identifier;      // the filename for this voice within espeak-ng-data/voices
+  568|       |	unsigned char gender;  // 0=none 1=male, 2=female,
+  569|       |	unsigned char age;     // 0=not specified, or age in years
+  570|       |	unsigned char variant; // only used when passed as a parameter to espeak_SetVoiceByProperties
+  571|       |	unsigned char xx1;     // for internal use
+  572|       |	int score;       // for internal use
+  573|       |	void *spare;     // for internal use
+  574|       |} espeak_VOICE;
+  575|       |
+  576|       |/* Note: The espeak_VOICE structure is used for two purposes:
+  577|       |  1.  To return the details of the available voices.
+  578|       |  2.  As a parameter to  espeak_SetVoiceByProperties() in order to specify selection criteria.
+  579|       |
+  580|       |   In (1), the "languages" field consists of a list of (UTF8) language names for which this voice
+  581|       |   may be used, each language name in the list is terminated by a zero byte and is also preceded by
+  582|       |   a single byte which gives a "priority" number.  The list of languages is terminated by an
+  583|       |   additional zero byte.
+  584|       |
+  585|       |   A language name consists of a language code, optionally followed by one or more qualifier (dialect)
+  586|       |   names separated by hyphens (eg. "en-uk").  A voice might, for example, have languages "en-uk" and
+  587|       |   "en".  Even without "en" listed, voice would still be selected for the "en" language (because
+  588|       |   "en-uk" is related) but at a lower priority.
+  589|       |
+  590|       |   The priority byte indicates how the voice is preferred for the language. A low number indicates a
+  591|       |   more preferred voice, a higher number indicates a less preferred voice.
+  592|       |
+  593|       |   In (2), the "languages" field consists simply of a single (UTF8) language name, with no preceding
+  594|       |   priority byte.
+  595|       |*/
+  596|       |
+  597|       |#ifdef __cplusplus
+  598|       |extern "C"
+  599|       |#endif
+  600|       |ESPEAK_API const espeak_VOICE **espeak_ListVoices(espeak_VOICE *voice_spec);
+  601|       |/* Reads the voice files from espeak-ng-data/voices and creates an array of espeak_VOICE pointers.
+  602|       |   The list is terminated by a NULL pointer
+  603|       |
+  604|       |   If voice_spec is NULL then all voices are listed.
+  605|       |   If voice spec is given, then only the voices which are compatible with the voice_spec
+  606|       |   are listed, and they are listed in preference order.
+  607|       |*/
+  608|       |
+  609|       |#ifdef __cplusplus
+  610|       |extern "C"
+  611|       |#endif
+  612|       |ESPEAK_API espeak_ERROR espeak_SetVoiceByFile(const char *filename);
+  613|       |/* Loads a voice given the file path.  Language is not considered.
+  614|       |   "filename" is a UTF8 string.
+  615|       |
+  616|       |   Return: EE_OK: operation achieved
+  617|       |           EE_BUFFER_FULL: the command can not be buffered;
+  618|       |             you may try after a while to call the function again.
+  619|       |	   EE_INTERNAL_ERROR.
+  620|       |*/
+  621|       |
+  622|       |#ifdef __cplusplus
+  623|       |extern "C"
+  624|       |#endif
+  625|       |ESPEAK_API espeak_ERROR espeak_SetVoiceByName(const char *name);
+  626|       |/* Searches for a voice with a matching "name" field.  Language is not considered.
+  627|       |   "name" is a UTF8 string.
+  628|       |
+  629|       |   Return: EE_OK: operation achieved
+  630|       |           EE_BUFFER_FULL: the command can not be buffered;
+  631|       |             you may try after a while to call the function again.
+  632|       |	   EE_INTERNAL_ERROR.
+  633|       |*/
+  634|       |
+  635|       |#ifdef __cplusplus
+  636|       |extern "C"
+  637|       |#endif
+  638|       |ESPEAK_API espeak_ERROR espeak_SetVoiceByProperties(espeak_VOICE *voice_spec);
+  639|       |/* An espeak_VOICE structure is used to pass criteria to select a voice.  Any of the following
+  640|       |   fields may be set:
+  641|       |
+  642|       |   name     NULL, or a voice name
+  643|       |
+  644|       |   languages  NULL, or a single language string (with optional dialect), eg. "en-uk", or "en"
+  645|       |
+  646|       |   gender   0=not specified, 1=male, 2=female
+  647|       |
+  648|       |   age      0=not specified, or an age in years
+  649|       |
+  650|       |   variant  After a list of candidates is produced, scored and sorted, "variant" is used to index
+  651|       |            that list and choose a voice.
+  652|       |            variant=0 takes the top voice (i.e. best match). variant=1 takes the next voice, etc
+  653|       |*/
+  654|       |
+  655|       |#ifdef __cplusplus
+  656|       |extern "C"
+  657|       |#endif
+  658|       |ESPEAK_API espeak_VOICE *espeak_GetCurrentVoice(void);
+  659|       |/* Returns the espeak_VOICE data for the currently selected voice.
+  660|       |   This is not affected by temporary voice changes caused by SSML elements such as <voice> and <s>
+  661|       |*/
+  662|       |
+  663|       |#ifdef __cplusplus
+  664|       |extern "C"
+  665|       |#endif
+  666|       |ESPEAK_API espeak_ERROR espeak_Cancel(void);
+  667|       |/* Stop immediately synthesis and audio output of the current text. When this
+  668|       |   function returns, the audio output is fully stopped and the synthesizer is ready to
+  669|       |   synthesize a new message.
+  670|       |
+  671|       |   Return: EE_OK: operation achieved
+  672|       |	   EE_INTERNAL_ERROR.
+  673|       |*/
+  674|       |
+  675|       |
+  676|       |#ifdef __cplusplus
+  677|       |extern "C"
+  678|       |#endif
+  679|       |ESPEAK_API int espeak_IsPlaying(void);
+  680|       |/* Returns 1 if audio is played, 0 otherwise.
+  681|       |*/
+  682|       |
+  683|       |#ifdef __cplusplus
+  684|       |extern "C"
+  685|       |#endif
+  686|       |ESPEAK_API espeak_ERROR espeak_Synchronize(void);
+  687|       |/* This function returns when all data have been spoken.
+  688|       |   Return: EE_OK: operation achieved
+  689|       |	   EE_INTERNAL_ERROR.
+  690|       |*/
+  691|       |
+  692|       |#ifdef __cplusplus
+  693|       |extern "C"
+  694|       |#endif
+  695|       |ESPEAK_API espeak_ERROR espeak_Terminate(void);
+  696|       |/* last function to be called.
+  697|       |   Return: EE_OK: operation achieved
+  698|       |	   EE_INTERNAL_ERROR.
+  699|       |*/
+  700|       |
+  701|       |
+  702|       |#ifdef __cplusplus
+  703|       |extern "C"
+  704|       |#endif
+  705|       |ESPEAK_API const char *espeak_Info(const char **path_data);
+  706|       |/* Returns the version number string.
+  707|       |   path_data  returns the path to espeak_data
+  708|       |*/
+  709|       |#endif
+
+/home/kmamadoudram/MasterCSI/semestre2/ter/test/espeak-ng/tests/my_fuzzer.c:
+    1|       |/*
+    2|       | * Copyright (C) 2018 Sascha Brawer
+    3|       | *
+    4|       | * This program is free software; you can redistribute it and/or modify
+    5|       | * it under the terms of the GNU General Public License as published by
+    6|       | * the Free Software Foundation; either version 3 of the License, or
+    7|       | * (at your option) any later version.
+    8|       | *
+    9|       | * This program is distributed in the hope that it will be useful,
+   10|       | * but WITHOUT ANY WARRANTY; without even the implied warranty of
+   11|       | * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   12|       | * GNU General Public License for more details.
+   13|       | *
+   14|       | * You should have received a copy of the GNU General Public License
+   15|       | * along with this program; if not, write see:
+   16|       | *             <http://www.gnu.org/licenses/>.
+   17|       | */
+   18|       |
+   19|       |#include "config.h"
+   20|       |
+   21|       |#include <stdint.h>
+   22|       |#include <stdlib.h>
+   23|       |#include <string.h>
+   24|       |#include <libgen.h>
+   25|       |
+   26|       |#include <espeak-ng/espeak_ng.h>
+   27|       |
+   28|       |/***** CONFIG *****/
+   29|       |#define LANGUAGE			"en"
+   30|       |#define MAX_LEN				8192
+   31|      0|#define ESPEAK_DATA_PATH	"/usr/lib/x86_64-linux-gnu/espeak-ng-data/"
+   32|       |
+   33|       |#define N_FUZZED_LANG		4
+   34|       |static const char *langs[N_FUZZED_LANG+1] = {
+   35|       |	"en",
+   36|       |	"fr",
+   37|       |	"ru",
+   38|       |	"Georgian",
+   39|       |	NULL
+   40|       |};
+   41|       |
+   42|       |static int initialized = 0;
+   43|       |
+   44|      0|static int SynthCallback(short *wav, int numsamples, espeak_EVENT *events) {
+   45|      0|	(void)wav; // unused
+   46|      0|	(void)numsamples; // unused
+   47|      0|	(void)events; // unused
+   48|      0|
+   49|      0|	return 0;
+   50|      0|}
+   51|       |
+   52|       |
+   53|       |/* See http://llvm.org/docs/LibFuzzer.html */
+   54|       |extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
+   55|       |extern int LLVMFuzzerInitialize(const int* argc, char*** argv);
+   56|       |
+   57|       |char *filepath = NULL;
+   58|       |
+   59|       |extern int LLVMFuzzerInitialize(const int* argc, char*** argv)
+   60|      1|{
+   61|      1|	(void)argc; // unused
+   62|      1|	//filepath = dirname(strdup((*argv)[0]));
+   63|      1|
+   64|      1|	return 0;
+   65|      1|}
+   66|       |
+   67|      0|extern int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+   68|      0|	if (!initialized) {
+   69|      0|		const char *hasDataPath = getenv("ESPEAK_DATA_PATH");
+   70|      0|		if (!hasDataPath) {
+   71|      0|			setenv("ESPEAK_DATA_PATH",ESPEAK_DATA_PATH,0);
+   72|      0|		}
+   73|      0|		espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, 0, NULL, 0);
+   74|      0|		initialized = 1;
+   75|      0|		fprintf(stderr, "ESPEAK_DATA_PATH=%s\n", getenv("ESPEAK_DATA_PATH"));
+   76|      0|
+   77|      0|	}
+   78|      0|
+   79|      0|	char *str = malloc(size+1);
+   80|      0|	memcpy(str, data, size);
+   81|      0|	str[size] = 0;
+   82|      0|	int synth_flags = espeakCHARS_AUTO ;
+   83|      0|	//for (int i=0; i<N_FUZZED_LANG; i++)
+   84|      0|	{
+   85|      0|	//	espeak_SetVoiceByName(langs[i]);
+   86|      0|		espeak_Synth((char*) str, size+1, 0, POS_CHARACTER, 0,
+   87|      0|					synth_flags, NULL, NULL);
+   88|      0|	}
+   89|      0|		free(str);
+   90|      0|
+   91|      0|
+   92|      0|	return 0; 	
+   93|      0|}
+

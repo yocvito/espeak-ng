@@ -1,0 +1,243 @@
+// Emoji and Other Symbol pronunciations for Basque
+//
+// Entries with `text|emoji` in the comments have text and emoji forms. They
+// can be followed by [FE0E] to select the text style, and [FE0F] to select
+// the emoji style.
+//
+// Entries with 'other' in the comments are not defined as emoji, but are other
+// Unicode characters.
+//
+// NOTE: See `src/ucd-tools/data/espeak-ng/emoji-data.txt` for additional data
+// in interpreting ZWJ emoji sequences.
+
+$textmode
+
+// 0000..007F : C0 Controls and Basic Latin
+
+//+	plus								// [002B] other (no translation)
+
+// 0080..00FF : C1 Controls and Latin-1 Supplement
+
+//¢	cents								// [00A2] other (no translation)
+//£	pound								// [00A3] other (no translation)
+//¤	currency sign							// [00A4] other (no translation)
+//¥	yen								// [00A5] other (no translati aurpegia					// [1F600]
+😁	begiez barre egiten ari den aurpegia				// [1F601]
+😂	pozez negar egiten ari den aurpegia				// [1F602]
+😃	irribarre egiten ari den aurpegia, ahoa irekita			// [1F603]
+😄	begiez irribarre egiten ari den aurpegia, ahoa irekita		// [1F604]
+😅	irribarre egiten ari den aurpegia, izerdi hotzarekin eta ahora irekita// [1F605]
+😆	irribarre egiten ari den aurpegia, begiak itxita		// [1F606]
+😇	irribarre egiten ari den aurpegia argi-koroarekin		// [1F607]
+😈	irribarre egiten ari den aurpegi adarduna			// [1F608]
+😉	begiaz keinu egiten ari den aurpegia				// [1F609]
+😊	begiez irribarre egiten ari den aurpegia			// [1F60A]
+😋	janari gozoa dastatzen ari den aurpegia				// [1F60B]
+😌	lasaitasun-aurpegia						// [1F60C]
+😍	irribarre egiten ari den aurpegia, bihotz-itxurako begiekin	// [1F60D]
+😎	irribarre egiten ari den aurpegia, eguzkitako betaurrekoekin	// [1F60E]
+😏	handitasun-aurpegia						// [1F60F]
+😐	aurpegi neutrala						// [1F610]
+😑	espresiorik gabeko aurpegia					// [1F611]
+😒	aspertu-aurpegia						// [1F612]
+😓	izerdi hotza duen aurpegia					// [1F613]
+😔	aurpegi pentsakorra						// [1F614]
+😕	nahasketa-aurpegia						// [1F615]
+😖	hutsegite-aurpegia						// [1F616]
+😗	musuka ari den aurpegia						// [1F617]
+😘	musu bat bidaltzen ari den aurpegia				// [1F618]
+😙	musuka eta begiez irribarre egiten ari den aurpegia		// [1F619]
+😚	musuka ari den aurpegia, begiak itxita				// [1F61A]
+😛	mingaina kanpoan duen aurpegia					// [1F61B]
+😜	mingaina kanpoan duen eta begiaz keinu egiten ari den aurpegia	// [1F61C]
+😝	mingaina kanpoan duen eta begiak itxita dituen aurpegia		// [1F61D]
+😞	etsipen-aurpegia						// [1F61E]
+😟	aurpegi kezkatua						// [1F61F]
+😠	haserre-aurpegia						// [1F620]
+😡	aurpegi muturtua						// [1F621]
+😢	negarrez ari den aurpegia					// [1F622]
+😣	aurpegi nekaezina						// [1F623]
+😤	sudurretik kea darion aurpegia					// [1F624]
+😥	desengainatuta baina lasaiago					// [1F625]
+😦	kopeta ilunduta eta ahoa irekita duen aurpegia			// [1F626]
+😧	estutasun-aurpegia						// [1F627]
+😨	ikara-aurpegia							// [1F628]
+😩	neke-aurpegia							// [1F629]
+😪	logura-aurpegia							// [1F62A]
+😫	nekatu-aurpegia							// [1F62B]
+😬	imintzio-aurpegia						// [1F62C]
+😭	negar eta negar ari den aurpegha				// [1F62D]
+😮	ahoa irekita duen aurpegia					// [1F62E]
+😯	harridura-aurpegia						// [1F62F]
+😰	ahoa irekita eta izerdi hotza duen aurpegia			// [1F630]
+😱	beldurrez oihuka ari den aurpegia				// [1F631]
+😲	harritu-aurpegia						// [1F632]
+😳	aurpegi gorritua						// [1F633]
+😴	lo dagoen aurpegia						// [1F634]
+😵	zorabio-aurpegia						// [1F635]
+😶	ahorik gabeko aurpegia						// [1F636]
+😷	mediku-maskara daraman aurpegia					// [1F637]
+😸	begiez barre egiten ari den katu-aurpegia			// [1F638]
+😹	pozez negar ari den katu-aurpegia				// [1F639]
+😺	ahoa irekita duen eta irribarre egiten ari den katu-aurpegia	// [1F63A]
+😻	bihotz-itxurako begiak dituen eta irribarre egiten ari den katu-aurpegia// [1F63B]
+😼	irribarre maltzurra duen katu-aurpegia				// [1F63C]
+😽	begiak itxita dituen eta musuka ari den katu-aurpegia		// [1F63D]
+😾	katu-aurpegi muturtua						// [1F63E]
+😿	negarrez ari den katu-aurpegia					// [1F63F]
+🙀	leher eginda dagoen katu-aurpegia				// [1F640]
+🙁	aurpegi apur bat kopetiluna					// [1F641]
+🙂	apur bat irribarre egiten ari den aurpegia			// [1F642]
+🙃	buruz behera dagoen aurpegia					// [1F643]
+🙄 BI
+🇧🇯	bandera: Benin							// [1F1E7 1F1EF] BJ
+🇧🇱	bandera: Saint Barthélemy					// [1F1E7 1F1F1] BL
+🇧🇲	bandera: Bermuda						// [1F1E7 1F1F2] BM
+🇧🇳	bandera: Brunei							// [1F1E7 1F1F3] BN
+🇧🇴	bandera: Bolivia						// [1F1E7 1F1F4] BO
+🇧🇶	bandera: Karibeko Herbehereak					// [1F1E7 1F1F6] BQ
+🇧🇷	bandera: Brasil							// [1F1E7 1F1F7] BR
+🇧🇸	bandera: Bahamak						// [1F1E7 1F1F8] BS
+🇧🇹	bandera: Bhutan							// [1F1E7 1F1F9] BT
+🇧🇻	bandera: Bouvet uhartea						// [1F1E7 1F1FB] BV
+🇧🇼	bandera: Botswana						// [1F1E7 1F1FC] BW
+🇧🇾	bandera: Bielorrusia						// [1F1E7 1F1FE] BY
+🇧🇿	bandera: Belize							// [1F1E7 1F1FF] BZ
+🇨🇦	bandera: Kanada							// [1F1E8 1F1E6] CA
+🇨🇨	bandera: Cocos uharteak						// [1F1E8 1F1E8] CC
+🇨🇩	bandera: Kongoko Errepublika Demokratikoa			// [1F1E8 1F1E9] CD
+🇨🇫	bandera: Afrika Erdiko Errepublika				// [1F1E8 1F1EB] CF
+🇨🇬	bandera: Kongo							// [1F1E8 1F1EC] CG
+🇨🇭	bandera: Suitza							// [1F1E8 1F1ED] CH
+🇨🇮	bandera: Boli Kosta						// [1F1E8 1F1EE] CI
+🇨🇰	bandera: Cook uharteak						// [1F1E8 1F1F0] CK
+🇨🇱	bandera: Txile							// [1F1E8 1F1F1] CL
+🇨🇲	bandera: Kamerun						// [1F1E8 1F1F2] CM
+🇨🇳	bandera: Txina							// [1F1E8 1F1F3] CN
+🇨🇴	bandera: Kolonbia						// [1F1E8 1F1F4] CO
+🇨🇵	bandera: Clipperton uhartea					// [1F1E8 1F1F5] CP
+🇨🇷	bandera: Costa Rica						// [1F1E8 1F1F7] CR
+🇨🇺	bandera: Kuba							// [1F1E8 1F1FA] CU
+🇨🇻	bandera: Cabo Verde						// [1F1E8 1F1FB] CV
+🇨🇼	bandera: Curaçao						// [1F1E8 1F1FC] CW
+🇨🇽	bandera: Christmas uhartea					// [1F1E8 1F1FD] CX
+🇨🇾	bandera: Zipre							// [1F1E8 1F1FE] CY
+🇨🇿	bandera: Txekia							// [1F1E8 1F1FF] CZ
+🇩🇪	bandera: Alemania						// [1F1E9 1F1EA] DE
+🇩🇬	bandera: Diego García						// [1F1E9 1F1EC] DG
+🇩🇯	bandera: Djibuti						// [1F1E9 1F1EF] DJ
+🇩🇰	bandera: Danimarka						// [1F1E9 1F1F0] DK
+🇩🇲	bandera: Dominika						// [1F1E9 1F1F2] DM
+🇩🇴	bandera: Dominikar Errepublika					// [1F1E9 1F1F4] DO
+🇩🇿	bandera: Aljeria						// [1F1E9 1F1FF] DZ
+🇪🇦	bandera: Ceuta eta Melilla					// [1F1EA 1F1E6] EA
+🇪🇨	bandera: Ekuador						// [1F1EA 1F1E8] EC
+🇪🇪	bandera: Estonia						// [1F1EA 1F1EA] EE
+🇪🇬	bandera: Egipto							// [1F1EA 1F1EC] EG
+🇪🇭	bandera: Mendebaldeko Sahara					// [1F1EA 1F1ED] EH
+🇪🇷	bandera: Eritrea						// [1F1EA 1F1F7] ER
+🇪🇸	bandera: Espainia						// [1F1EA 1F1F8] ES
+🇪🇹	bandera: Etiopia						// [1F1EA 1F1F9] ET
+🇪🇺	bandera: Europar Batasuna					// [1F1EA 1F1FA] EU
+🇫🇮	bandera: Finlandia						// [1F1EB 1F1EE] FI
+🇫🇯	bandera: Fiji							// [1F1EB 1F1EF] FJ
+🇫🇰	bandera: Malvinak						// [1F1EB 1F1F0] FI
+🇫🇲	bandera: Mikronesia						// [1F1EB 1F1F2] FM
+🇫🇴	bandera: Faroe uharteak						// [1F1EB 1F1F4] FO
+🇫🇷	bandera: Frantzia						// [1F1EB 1F1F7] FR
+🇬🇦	bandera: Gabon							// [1F1EC 1F1E6] GA
+🇬🇧	bandera: Erresuma Batua						// [1F1EC 1F1E7] GB
+🇬🇩	bandera: Grenada						// [1F1EC 1F1E9] GD
+🇬🇪	bandera: Georgia						// [1F1EC 1F1EA] GE
+🇬🇫	bandera: Guyana Frantsesa					// [1F1EC 1F1EB] GF
+🇬🇬	bandera: Guernesey						// [1F1EC 1F1EC] GG
+🇬🇭	bandera: Ghana							// [1F1EC 1F1ED] GH
+🇬🇮	bandera: Gibraltar						// [1F1EC 1F1EE] GI
+🇬🇱	bandera: Groenlandia						// [1F1EC 1F1F1] GL
+🇬🇲	bandera: Gambia							// [1F1EC 1F1F2] GM
+🇬🇳	bandera: Ginea							// [1F1EC 1F1F3] GN
+🇬🇵	bandera: Guadalupe						// [1F1EC 1F1F5] GP
+🇬🇶	bandera: Ekuatore Ginea						// [1F1EC 1F1F6] GQ
+🇬🇷	bandera: Grezia							// [1F1EC 1F1F7] GR
+🇬🇸	bandera: Hegoaldeko Georgia eta Hegoaldeko Sandwich uharteak	// [1F🇹🇲	bandera: Turkmenistan						// [1F1F9 1F1F2] TM
+🇹🇳	bandera: Tunisia						// [1F1F9 1F1F3] TN
+🇹🇴	bandera: Tonga							// [1F1F9 1F1F4] TO
+🇹🇷	bandera: Turkia							// [1F1F9 1F1F7] TR
+🇹🇹	bandera: Trinidad eta Tobago					// [1F1F9 1F1F9] TT
+🇹🇻	bandera: Tuvalu							// [1F1F9 1F1FB] TV
+🇹🇼	bandera: Taiwan							// [1F1F9 1F1FC] TW
+🇹🇿	b�������������������������������������������������������andera: Tanzania						// [1F1F9 1F1FF] TZ
+🇺🇦	bandera: Ukraina						// [1F1FA 1F1E6] UA
+🇺🇬	bandera: Uganda							// [1F1FA 1F1EC] UG
+🇺🇲	bandera: Ameriketako Estatu Batuetako Kanpoaldeko Uharte Txikiak// [1F1FA 1F1F2] UM
+🇺🇳	�️‍♀	pisuak altxatzen ari den emakumea			// [1F3CB 200D 2640]
+�/��️‍♂	pisuak altxatzen ari den gizona				// [1F3CB 200D 2642]
+🏌️‍♀	emakume golflaria					// [1F3CC 200D 2640]
+🏌️‍♂	gizon golflaria						// [1F3CC 200D 2642]
+👯‍♀	parrandan ari diren emakumeak				// [1F46F 200D 2640]
+👯‍♂	parrandan ari diren gizonak				// [1F46F 200D 2642]
+💆‍♀	masajea jasotzen ari den emakumea			// [1F486 200D 2640]
+💆‍♂	masajea jasotzen ari den pertsona			// [1F486 200D 2642]
+💇‍♀	ilea mozten ari dioten emakumea				// [1F487 200D 2640]
+💇‍♂	ilea mozten ari dioten gizona				// [1F487 200D 2642]
+🚣‍♀	emakume arraunlaria					// [1F6A3 200D 2640]
+🚣‍♂	gizon arraunlaria					// [1F6A3 200D 2642]
+🚴‍♀	emakume txirrindularia					// [1F6B4 200D 2640]
+🚴‍♂	gizon txirrindularia					// [1F6B4 200D 2642]
+🚵‍♀	mendiko bizikletan dabilen emakumea			// [1F6B5 200D 2640]
+🚵‍♂	mendiko bizikletan dabilen gizona			// [1F6B5 200D 2642]
+🚶‍♀	oinez ari den emakumea					// [1F6B6 200D 2640]
+🚶‍♂	oinez ari den gizona					// [1F6B6 200D 2642]
+🤸‍♀	gurpil-ariketa egiten ari den emakumea			// [1F938 200D 2640]
+🤸‍♂	gurpil-ariketa egiten ari den gizona			// [1F938 200D 2642]
+🤹‍♀	emakumea malabarismotan					// [1F939 200D 2640]
+🤹‍♂	gizona malabarismotan					// [1F939 200D 2642]
+🤼‍♀	emakumeak borrokan					// [1F93C 200D 2640]
+🤼‍♂	gizonak borrokan					// [1F93C 200D 2642]
+🤽‍♀	emakumea waterpoloan jolasten				// [1F93D 200D 2640]
+🤽‍♂	gizona waterpoloan jolasten				// [1F93D 200D 2642]
+🤾‍♀	emakumea eskubaloian jolasten				// [1F93E 200D 2640]
+🤾‍♂	gizona eskubaloian jolasten				// [1F93E 200D 2642]
+🧖‍♀	emakume bat lurrun-gelan				// [1F9D6 200D 2640]
+🧖‍♂	gizon bat lurrun-gelan					// [1F9D6 200D 2642]
+🧗‍♀	emakume eskalatzaile					// [1F9D7 200D 2640]
+🧗‍♂	gizon eskalatzaile					// [1F9D7 200D 2642]
+🧘‍♀	emakume bat loto-posizioan				// [1F9D8 200D 2640]
+🧘‍♂	gizon bat loto-posizioan				// [1F9D8 200D 2642]
+
+// Emoji ZWJ Sequence: Gendered Gestures
+
+💁‍♀	eskean dabilen emakumea					// [1F481 200D 2640]
+💁‍♂	eskean dabilen gizona					// [1F481 200D 2642]
+🙅‍♀	ados ez dagoela adierazten ari den emakumea		// [1F645 200D 2640]
+🙅‍♂	ados ez dagoela adierazten ari den gizona		// [1F645 200D 2642]
+🙆‍♀	ados dagoela adierazten ari den emakumea		// [1F646 200D 2640]
+🙆‍♂	ados dagoela adierazten ari den gizona			// [1F646 200D 2642]
+🙇‍♀	burua makurtzen ari den emakumea			// [1F647 200D 2640]
+🙇‍♂	burua makurtzen ari den gizona				// [1F647 200D 2642]
+🙋‍♀	eskua altxatzen ari den emakumea			// [1F64B 200D 2640]
+🙋‍♂	eskua altxatzen ari den gizona				// [1F64B 200D 2642]
+🙍‍♀	kopeta zimurtzen ari den emakumea			// [1F64D 200D 2640]
+🙍‍♂	kopeta zimurtzen ari den gizona				// ������������������������������������������������������������������������������������������������������������[1F64D 200D 2642]
+🙎‍♀	emakume muturtua					// [1F64E 200D 2640]
+🙎‍♂	gizon muturtua						// [1F64E 200D 2642]
+🤦‍♀	esku-azpia aurpegian duen emakumea			// [1F926 200D 2640]
+🤦‍♂	esku-azpia aurpegian duen gizona			// [1F926 200D 2642]
+🤷‍♀	sorbaldak altxatzen ari den emakumea			// [1F937 200D 2640]
+🤷‍♂	sorbaldak altxatzen ari den gizona			// [1F937 200D 2642]
+
+// Emoji ZWJ Sequence: Other
+
+🏳‍🌈	ortzadarraren bandera					// [1F3F3 200D 1F308]
+🏴‍☠	piraten bandera						// [1F3F4 200D 2620]
+👁‍🗨	begi bat duen bunbuiloa					// [1F441 200D 1F5E8]
+
+// References:
+//   [UCD]	Unicode Character Database 11.0.0 [http://www.unicode.org/Public/11.0.0/ucd/]
+//   [Emoji]	Unicode Emoji 11.0 [http://www.unicode.org/Public/emoji/11.0/]
+//   [CLDR]	Unicode Common Locale Data Repository 33.1 [http://cldr.unicode.org/index/downloads/cldr-33.1]
+//
+// Sources:
+//   1.  emoji-test.txt (Emoji)
+//   2.  common/annotations/eu.xml (CLDR)
+//   3.  emoji-zwj-sequences.txt (Emoji)

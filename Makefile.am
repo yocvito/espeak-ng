@@ -288,6 +288,11 @@ check:	tests/encoding.check \
 	tests/cmd_options.check
 
 ##### fuzzer:
+if HAVE_LIBFUZZER
+if USE_COVERAGE
+AM_CFLAGS += -fprofile-instr-generate -fcoverage-mapping
+endif
+endif
 
 if !HAVE_LIBFUZZER
 # libfuzzrunner is a stub implementation of libFuzzer that calls the
@@ -297,7 +302,9 @@ tests_libfuzzrunner_la_CFLAGS  = -Isrc/libespeak-ng ${AM_CFLAGS}
 tests_libfuzzrunner_la_SOURCES = tests/fuzzrunner.c
 endif
 
+
 check_PROGRAMS += tests/ssml-fuzzer.test
+
 tests_ssml_fuzzer_test_CFLAGS  = ${AM_CFLAGS}
 tests_ssml_fuzzer_test_SOURCES = tests/ssml-fuzzer.c
 tests_ssml_fuzzer_test_LDADD   = src/libespeak-ng.la
@@ -311,7 +318,7 @@ endif
 
 tests_my_fuzzer_SOURCES = tests/my_fuzzer.c
 tests_my_fuzzer_LDADD =  src/libespeak-ng.la
-tests_my_fuzzer_CFLAGS= -fsanitize=address,undefined,fuzzer -fno-omit-frame-pointer -g -fsanitize-coverage=edge -Isrc/libespeak-ng -g -O2 -fdebug-prefix-map=/root=. -fstack-protector-strong -Wformat -Werror=format-security ${AM_CFLAGS}
+tests_my_fuzzer_CFLAGS= -fsanitize=address,undefined,fuzzer -fno-omit-frame-pointer -g -fsanitize-coverage=edge -g -O2 -fdebug-prefix-map=/root=. -fstack-protector-strong -Wformat -Werror=format-security -fprofile-instr-generate -fcoverage-mapping -Isrc/libespeak-ng  ${AM_CFLAGS}
 tests_my_fuzzer_LDFLAGS= -fsanitize=address,undefined,fuzzer -static -lm  -fsanitize-coverage=edge -Wl,-z,relro ${PCAUDIOLIB_LIBS}
 
 tests_ssml_fuzzer_SOURCES = tests/ssml-fuzzer.c
@@ -323,8 +330,11 @@ if HAVE_LIBFUZZER
 else
 tests_ssml_fuzzer_test_LDADD += tests/libfuzzrunner.la
 endif
+if HAVE_LIBFUZZER
 bin_PROGRAMS +=  tests/my_fuzzer
 bin_PROGRAMS +=  tests/ssml_fuzzer
+endif
+
 
 tests/ssml-fuzzer.check: tests/ssml-fuzzer.test
 	@echo "  TEST      $<"
